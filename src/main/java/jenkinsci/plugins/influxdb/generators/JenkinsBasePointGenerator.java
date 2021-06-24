@@ -124,7 +124,25 @@ public class JenkinsBasePointGenerator extends AbstractPointGenerator {
         }
 
         if (hasMetricsPlugin(build)) {
+            java.util.logging.Logger LOGGER = java.util.logging.Logger.getLogger(this.getClass().getName());
+
             point.addField(TIME_IN_QUEUE, build.getAction(jenkins.metrics.impl.TimeInQueueAction.class).getQueuingDurationMillis());
+            point.addField(TOTAL_TIME_IN_QUEUE, build.getAction(jenkins.metrics.impl.TimeInQueueAction.class).getQueuingTimeMillis());
+            point.addField(NUM_SUBTASKS, build.getAction(jenkins.metrics.impl.TimeInQueueAction.class).getSubTaskCount());
+
+            // Subtask Point Generator -- Used to check longest subtask wait time
+            int subtask_count = 0;
+            for (Map.Entry<String, Long> subtask :
+                build.getAction(jenkins.metrics.impl.TimeInQueueAction.class).getSubTaskMap().entrySet()) {
+
+                if (subtask_count > MAX_SUBTASKS) {
+                    LOGGER.log(Level.WARNING, "Too many subtasks");
+                    break;
+                }
+
+                point.addField(subtask.getKey(), subtask.getValue());
+                subtask_count++;
+            }
         }
 
         if (StringUtils.isNotBlank(jenkinsEnvParameterField)) {
