@@ -13,6 +13,7 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Objects;
 
 import java.util.logging.Logger;
 import java.util.logging.Level;
@@ -48,7 +49,7 @@ public class JenkinsBasePointGenerator extends AbstractPointGenerator {
     public static final String TESTS_SKIPPED = "tests_skipped";
     public static final String TESTS_TOTAL = "tests_total";
 
-    public static final String TOTAL_TIME_IN_QUEUE = "total_time_in_queue";
+    public static final String SUMMED_TIME_IN_QUEUE = "summed_time_in_queue";
     public static final String NUM_SUBTASKS = "num_subtasks";
 
     public static final Integer MAX_SUBTASKS = 50;
@@ -58,6 +59,7 @@ public class JenkinsBasePointGenerator extends AbstractPointGenerator {
     private final String jenkinsEnvParameterField;
     private final String measurementName;
     private EnvVars env;
+    private final ProjectNameRenderer projectNameRenderer;
 
 
     // (Run<?, ?> build, TaskListener listener, MeasurementRenderer projectNameRenderer, long timestamp, String jenkinsEnvParameterTag) {
@@ -71,6 +73,8 @@ public class JenkinsBasePointGenerator extends AbstractPointGenerator {
         this.jenkinsEnvParameterField = jenkinsEnvParameterField;
         this.measurementName = measurementName;
         this.env = env;
+        this.projectNameRenderer = Objects.requireNonNull(projectNameRenderer);
+
     }
 
     public boolean hasReport() {
@@ -123,7 +127,7 @@ public class JenkinsBasePointGenerator extends AbstractPointGenerator {
             java.util.logging.Logger LOGGER = java.util.logging.Logger.getLogger(this.getClass().getName());
 
             point.addField(TIME_IN_QUEUE, build.getAction(jenkins.metrics.impl.TimeInQueueAction.class).getQueuingDurationMillis());
-            point.addField(TOTAL_TIME_IN_QUEUE, build.getAction(jenkins.metrics.impl.TimeInQueueAction.class).getQueuingTimeMillis());
+            point.addField(SUMMED_TIME_IN_QUEUE, build.getAction(jenkins.metrics.impl.TimeInQueueAction.class).getQueuingTimeMillis());
             point.addField(NUM_SUBTASKS, build.getAction(jenkins.metrics.impl.TimeInQueueAction.class).getSubTaskCount());
 
             // Subtask Point Generator -- Used to check longest subtask wait time
@@ -132,7 +136,10 @@ public class JenkinsBasePointGenerator extends AbstractPointGenerator {
                 build.getAction(jenkins.metrics.impl.TimeInQueueAction.class).getSubTaskMap().entrySet()) {
 
                 if (subtask_count > MAX_SUBTASKS) {
-                    LOGGER.log(Level.WARNING, "Too many subtasks");
+                    String projectName = projectNameRenderer.render(build);
+                    String buildNumber = build.getDisplayName();
+                    LOGGER.log(Level.WARNING, "Job " + projectName + " build number " + buildNumber +
+                        " generated too many subtasks -- Number of subtasks exceeded MAX_SUBTASKS threshold of 50");
                     break;
                 }
 
