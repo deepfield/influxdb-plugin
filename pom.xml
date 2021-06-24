@@ -20,15 +20,18 @@ THE SOFTWARE.
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
+
     <parent>
         <groupId>org.jenkins-ci.plugins</groupId>
         <artifactId>plugin</artifactId>
         <version>4.66</version>
     </parent>
+
     <artifactId>influxdb</artifactId>
     <url>https://github.com/jenkinsci/influxdb-plugin</url>
     <version>3.6</version>
     <packaging>hpi</packaging>
+
     <name>InfluxDB Plugin</name>
     <description>Push time series data from other plugins to InfluxDB</description>
 
@@ -38,6 +41,7 @@ THE SOFTWARE.
         <url>https://github.com/jenkinsci/influxdb-plugin</url>
         <tag>influxdb-3.6</tag>
     </scm>
+
     <properties>
         <cobertura.version>1.16</cobertura.version>
         <commons-csv.version>1.8</commons-csv.version>
@@ -64,6 +68,7 @@ THE SOFTWARE.
         <script-security.version>1244.ve463715a_f89c</script-security.version>
         <spotbugs.failOnError>false</spotbugs.failOnError>
     </properties>
+
     <licenses>
         <license>
             <name>MIT license</name>
@@ -71,6 +76,7 @@ THE SOFTWARE.
             <comments>All source code is under the MIT license.</comments>
         </license>
     </licenses>
+
     <repositories>
         <repository>
             <id>repo.jenkins-ci.org</id>
@@ -87,6 +93,7 @@ THE SOFTWARE.
             <url>https://repo.jenkins-ci.org/public/</url>
         </pluginRepository>
     </pluginRepositories>
+
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -104,6 +111,7 @@ THE SOFTWARE.
             </dependency>
         </dependencies>
     </dependencyManagement>
+
     <dependencies>
         <dependency>
             <groupId>org.ow2.asm</groupId>
