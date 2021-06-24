@@ -16,6 +16,9 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+
+import java.util.logging.Logger;
+import java.util.logging.Level;
 import java.util.StringJoiner;
 
 public class JenkinsBasePointGenerator extends AbstractPointGenerator {
@@ -50,6 +53,11 @@ public class JenkinsBasePointGenerator extends AbstractPointGenerator {
     public static final String TESTS_FAILED = "tests_failed";
     public static final String TESTS_SKIPPED = "tests_skipped";
     public static final String TESTS_TOTAL = "tests_total";
+
+    public static final String TOTAL_TIME_IN_QUEUE = "total_time_in_queue";
+    public static final String NUM_SUBTASKS = "num_subtasks";
+
+    public static final Integer MAX_SUBTASKS = 50;
 
     public static final String AGENT_LOG_PATTERN = "Running on ";
 
@@ -124,7 +132,25 @@ public class JenkinsBasePointGenerator extends AbstractPointGenerator {
         }
 
         if (hasMetricsPlugin(build)) {
+            java.util.logging.Logger LOGGER = java.util.logging.Logger.getLogger(this.getClass().getName());
+
             point.addField(TIME_IN_QUEUE, build.getAction(jenkins.metrics.impl.TimeInQueueAction.class).getQueuingDurationMillis());
+            point.addField(TOTAL_TIME_IN_QUEUE, build.getAction(jenkins.metrics.impl.TimeInQueueAction.class).getQueuingTimeMillis());
+            point.addField(NUM_SUBTASKS, build.getAction(jenkins.metrics.impl.TimeInQueueAction.class).getSubTaskCount());
+
+            // Subtask Point Generator -- Used to check longest subtask wait time
+            int subtask_count = 0;
+            for (Map.Entry<String, Long> subtask :
+                build.getAction(jenkins.metrics.impl.TimeInQueueAction.class).getSubTaskMap().entrySet()) {
+
+                if (subtask_count > MAX_SUBTASKS) {
+                    LOGGER.log(Level.WARNING, "Too many subtasks");
+                    break;
+                }
+
+                point.addField(subtask.getKey(), subtask.getValue());
+                subtask_count++;
+            }
         }
 
         if (StringUtils.isNotBlank(jenkinsEnvParameterField)) {
