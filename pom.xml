@@ -233,6 +233,8 @@ THE SOFTWARE.
             <version>${workflow-api.version}</version>
             <scope>test</scope>
         </dependency>
+
+
         <!-- RequireUpperBounds fix -->
         <dependency>
             <groupId>org.slf4j</groupId>
@@ -269,7 +271,9 @@ THE SOFTWARE.
             <artifactId>kotlin-stdlib</artifactId>
             <version>1.3.71</version>
         </dependency>
+
     </dependencies>
+
     <!-- The current maintainers of the plugin -->
     <developers>
         <developer>
