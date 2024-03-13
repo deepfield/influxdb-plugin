@@ -67,7 +67,7 @@ public class SerenityPointGenerator extends AbstractPointGenerator {
     }
 
     public boolean hasReport() {
-        return (serenityJsonSummaryFile.exists());
+        return serenityJsonSummaryFile.exists();
     }
 
     public Point[] generate() {
