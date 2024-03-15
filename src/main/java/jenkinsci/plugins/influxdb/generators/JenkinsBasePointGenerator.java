@@ -18,6 +18,11 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.StringJoiner;
 
+import java.util.Objects;
+
+import java.util.logging.Logger;
+import java.util.logging.Level;
+
 public class JenkinsBasePointGenerator extends AbstractPointGenerator {
 
     public static final String BUILD_TIME = "build_time";
@@ -53,6 +58,11 @@ public class JenkinsBasePointGenerator extends AbstractPointGenerator {
 
     public static final String AGENT_LOG_PATTERN = "Running on ";
 
+    public static final String SUMMED_TIME_IN_QUEUE = "summed_time_in_queue";
+    public static final String NUM_SUBTASKS = "num_subtasks";
+
+    public static final Integer MAX_SUBTASKS = 50;
+
     private final Run<?, ?> build;
     private final String customPrefix;
     private final String jenkinsEnvParameterField;
@@ -73,7 +83,6 @@ public class JenkinsBasePointGenerator extends AbstractPointGenerator {
         this.measurementName = measurementName;
         this.env = env;
         this.projectNameRenderer = Objects.requireNonNull(projectNameRenderer);
-
     }
 
     public boolean hasReport() {

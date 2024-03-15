@@ -33,7 +33,7 @@ THE SOFTWARE.
 
     <artifactId>influxdb</artifactId>
     <url>https://github.com/jenkinsci/influxdb-plugin</url>
-    <version>3.6</version>
+    <version>3.6-CUSTOM</version>
     <packaging>hpi</packaging>
 
     <name>InfluxDB Plugin</name>
@@ -63,7 +63,7 @@ THE SOFTWARE.
         <junit_plugin.version>1166.va_436e268e972</junit_plugin.version>
         <kotlin-stdlib.version>1.6.0</kotlin-stdlib.version>
         <matrix-project.version>1.20</matrix-project.version>
-        <metrics.version>4.0.2.8.1</metrics.version>
+        <metrics.version>4.1.6-CUSTOM</metrics.version>
         <mockito-core.version>3.3.3</mockito-core.version>
         <performance.version>3.0</performance.version>
         <perfpublisher.version>8.05</perfpublisher.version>
@@ -106,12 +106,6 @@ THE SOFTWARE.
                 <version>2143.ve4c3c9ec790a</version>
                 <scope>import</scope>
                 <type>pom</type>
-            </dependency>
-            <dependency>
-                <groupId>org.jenkins-ci.plugins.workflow</groupId>
-                <artifactId>workflow-durable-task-step</artifactId>
-                <version>2.35</version>
-                <optional>true</optional>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -307,6 +301,7 @@ THE SOFTWARE.
             <artifactId>gson</artifactId>
             <version>${gson.version}</version>
         </dependency>
+
     </dependencies>
 
 
